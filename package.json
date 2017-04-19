@@ -6,15 +6,20 @@
   "scripts": {
     "start": "roadhog server",
     "build": "roadhog build",
-    "lint": "eslint --ext .js src test",
-    "precommit": "npm run lint"
+    "lint": "eslint --ext .js src test"
   },
   "engines": {
     "install-node": "6.9.2"
   },
   "dependencies": {
+    "antd": "^2.8.3",
+    "babel-plugin-import": "^1.1.1",
     "babel-runtime": "^6.9.2",
     "dva": "^1.2.1",
+    "fs-extra": "^2.1.2",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "rc-queue-anim": "^0.13.3",
     "react": "^15.4.0",
     "react-dom": "^15.4.0"
   },
