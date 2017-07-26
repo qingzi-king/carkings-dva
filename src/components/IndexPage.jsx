@@ -54,6 +54,9 @@ class IndexPage extends React.Component {
           <li>
             <Link to="/test"><Button type="primary">测试</Button></Link>
           </li>
+          <li>
+            <Link to="/demoOrgin"><Button type="primary">原始组件Demo</Button></Link>
+          </li>
         </ul>
       </div>
     );

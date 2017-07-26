@@ -6,7 +6,7 @@ const users = {
 
   state: {
     loading: false,
-    name: '王轻姿',
+    name: '重庆交控',
     age: 23,
     addr: '中国重庆',
     goods: {
@@ -97,7 +97,17 @@ const users = {
         ...state,
         lists,
       };
-    }
+    },
+    clearDatas(state, action) {
+      console.log('clear datas...');
+      return {
+        ...state,
+        projectInfo: {
+          ...state.projectInfo,
+          Users: []
+        },
+      };
+    },
 
   }
 

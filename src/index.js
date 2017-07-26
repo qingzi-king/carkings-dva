@@ -1,20 +1,20 @@
 import dva from 'dva';
-import { useRouterHistory } from 'dva/router';
-import { createHashHistory } from 'history';
+import { useRouterHistory, browserHistory } from 'dva/router';
+import createLoading from 'dva-loading';
 
 import './utils/globalFunction';
 import './index.less';
 
 // 1. Initialize
 const app = dva({
-  history: useRouterHistory(createHashHistory)({ queryKey: false }), // 去掉路由中_k
+  history: browserHistory,
   onError(error) {
     console.error('app onError -- ', error);
   },
 });
 
 // 2. Plugins
-// app.use({});
+app.use(createLoading());
 
 // 3. Model
 app.model(require('./models/apps'));

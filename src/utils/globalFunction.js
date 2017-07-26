@@ -1,11 +1,11 @@
 // 判断对象的数据类型
-function ckIsClass(o) {
+const ckIsClass = (o) => {
   if (o === null) return 'Null';
   if (o === undefined) return 'Undefined';
   return Object.prototype.toString.call(o).slice(8, -1);
 }
 
-global.ckDeepClone = function(obj) {
+global.ckDeepClone = (obj) => {
   var result;
   var oClass = ckIsClass(obj);
 

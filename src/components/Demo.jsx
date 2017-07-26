@@ -1,31 +1,32 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
-import { Link } from 'dva/router';
+import { Link, routerRedux } from 'dva/router';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { Button, Spin } from 'antd';
+import { Button, Spin, Anchor, Affix } from 'antd';
+const AnchorLink = Anchor.Link;
 
 import styles from './IndexPage.less';
 
 // import MainLayout from '../layouts/mainLayout/MainLayout';
+import SubUsers from './Users/SubUsers';
 
-function Users({ location, dispatch, users, apps }) {
+const Users = ({ location, dispatch, users, apps, loading }) => {
 
-  function handleModifyUserName(name) {
+  const handleModifyUserName = (name) => {
     dispatch({
       type: 'users/edit', //users：表示models里面namespace的users，其中edit为其reducers中方法
       name: name,
     });
   }
-  function handleSaveUserName(name) {
+  const handleSaveUserName = (name) => {
     dispatch({
       type: 'users/save',
       name: name,
     });
   }
-  function handleChangeObject() {
+  const handleChangeObject = () => {
     dispatch({
       type: 'users/objChange',
       payload: {
@@ -33,7 +34,7 @@ function Users({ location, dispatch, users, apps }) {
       }
     });
   }
-  function handleChangeArray() {
+  const handleChangeArray = () => {
     dispatch({
       type: 'users/arrChange',
       payload: {
@@ -41,7 +42,7 @@ function Users({ location, dispatch, users, apps }) {
       }
     });
   }
-  function handleQuery(tempProjectId) {
+  const handleQuery = (tempProjectId) => {
     dispatch({
       type: 'users/query'
     });
@@ -58,17 +59,48 @@ function Users({ location, dispatch, users, apps }) {
     */
   }
 
+  const handleClearDatas = () => {
+    dispatch({
+      type: 'users/clearDatas'
+    });
+  }
+
+  const handleSubmitToMe = (id, values) => {
+    console.log(id, '子组件提交的数据：'+values)
+    dispatch({
+      type: 'users/objChange',
+      payload: {
+        numbers: values
+      }
+    });
+  }
+
   return (
     <div style={{width:1024,margin:'10px auto'}}>
 
       <Spin spinning={users.loading} tip="Loading...">
 
-        <Link to="/"><Button type="primary">跳转至主页</Button></Link>
+        <Link id="to-top" to="/"><Button type="primary">跳转至主页</Button></Link>
         <div className={styles.ck_Lists}>
           <p>姓名1：{apps.name}</p>
           <p>年龄1：{apps.age}</p>
           <p>地址1：{apps.addr}</p>
         </div>
+
+        {
+          loading ?
+            '请求进行中....'
+          :
+            '请求已完成！'
+        }
+
+        <Affix>
+          <Anchor>
+            <AnchorLink href="#to-top" title="回到顶部" />
+            <AnchorLink href="#to-bottom" title="回到底部" />
+          </Anchor>
+        </Affix>
+
         <div className={styles.ck_Lists}>
           <p>姓名2：{users.name} <Button size="small" type="primary" onClick={handleModifyUserName.bind(null, '轻姿王')}>更新</Button></p>
           <p>年龄2：{users.age} <Button size="small" type="primary" onClick={handleSaveUserName.bind(null, '轻姿王')}>更新</Button></p>
@@ -100,6 +132,7 @@ function Users({ location, dispatch, users, apps }) {
           <li>
             <Button size="small" type="primary" onClick={handleChangeArray}>变更Arr</Button>
             <Button size="small" type="primary" onClick={handleQuery.bind(null, 1)} style={{marginLeft:5}}>获取数据</Button>
+            <Button size="small" type="primary" onClick={handleClearDatas} style={{marginLeft:5}}>清除数据</Button>
           </li>
         </ul>
 
@@ -118,6 +151,11 @@ function Users({ location, dispatch, users, apps }) {
           })
         }
 
+        {/* ant锚点不可用 */}
+        <div id="to-bottom"></div>
+
+        <SubUsers onOk={handleSubmitToMe.bind(null, '66')} />
+
       </Spin>
     </div>
   );
@@ -130,4 +168,12 @@ function Users({ location, dispatch, users, apps }) {
 //   dispatch: PropTypes.func
 // }
 
-export default connect(({users, apps}) => ({users, apps}))(Users)
+function mapStateToProps(state) {
+  return {
+    users: state.users,
+    apps: state.apps,
+    loading: state.loading.models.users
+  };
+}
+
+export default connect(mapStateToProps)(Users)
